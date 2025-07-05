@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "home1Image": "assets/images/bg/umcoming1.png",
+    "home1AuthorName": "Tawasnik",
+    "home1AuthorImg": "assets/images/bg/upcoming-author1.png",
+    "home1Title": "Watercolor Special Lighter 2.2 For Saleing Offer",
+    "home1category": "Time zone",
+    "price": "15.99"
+  },
+  {
+    "id": 2,
+    "home1Image": "assets/images/bg/umcoming2.png",
+    "home1AuthorImg": "assets/images/bg/upcoming-author2.png",
+    "home1AuthorName": "Keniyam",
+    "home1Title": "Watercolor Special Lighter 2.2 For Saleing Offer",
+    "home1category": "Lit Gaslighte",
+    "price": "17.99"
+  },
+  {
+    "id": 3,
+    "home1Image": "assets/images/bg/umcoming3.png",
+    "home1AuthorImg": "assets/images/bg/upcoming-author3.png",
+    "home1AuthorName": "Wilison",
+    "home1Title": "Watercolor Special Lighter 2.2 For Saleing Offer",
+    "home1category": "motorcycle",
+    "price": "25.99"
+  },
+  {
+    "id": 4,
+    "home1Image": "assets/images/bg/umcoming4.png",
+    "home1AuthorImg": "assets/images/bg/upcoming-author2.png",
+    "home1AuthorName": "robat",
+    "home1Title": "Watercolor Special Lighter 2.2 For Saleing Offer",
+    "home1category": "Test Watch",
+    "price": "35.99"
+  }
+]

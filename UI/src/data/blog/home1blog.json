@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "image": "assets/images/blog/blogstyle11.png",
+        "date": "Jan 30, 2022",
+        "title": "David Droga Still Has Faith in Online Advertising Creative Digital Reviews",
+        "authorName": "Johan Martin",
+        "authorImage": "assets/images/blog/author1.png",
+        "commentNumber": "5"
+    },
+    {
+        "id": 2,
+        "image": "assets/images/blog/blogstyle12.png",
+        "date": "Jan 30, 2022",
+        "title": "Take our friend Johnny No-Job, for example. He’s a specialist in influencer.",
+        "authorName": "Willuma",
+        "authorImage": "assets/images/blog/author1.png",
+        "commentNumber": "12"
+    }
+]

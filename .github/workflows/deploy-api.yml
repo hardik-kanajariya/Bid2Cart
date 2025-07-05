@@ -1,0 +1,92 @@
+name: Deploy API to api.bid2cart.hardikkanajariya.in
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**'
+      - '!UI/**'  # Don't trigger on UI changes
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Allow Dubious Ownership
+        run: git config --global --add safe.directory /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
+
+      - name: Deploy Laravel API via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "📁 Navigating to Laravel API directory"
+            cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
+
+            echo "🔄 Pulling latest changes from Git"
+            git pull origin main
+
+            echo "🔧 Creating .env file"
+            cat > .env << 'EOF'
+            APP_NAME=${{ secrets.APP_NAME }}
+            APP_ENV=production
+            APP_KEY=${{ secrets.APP_KEY }}
+            APP_DEBUG=false
+            APP_URL=${{ secrets.APP_URL }}
+
+            LOG_CHANNEL=stack
+            LOG_DEPRECATIONS_CHANNEL=null
+            LOG_LEVEL=debug
+
+            DB_CONNECTION=${{ secrets.DB_CONNECTION }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_DATABASE=${{ secrets.DB_DATABASE }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+
+            BROADCAST_DRIVER=log
+            CACHE_DRIVER=file
+            FILESYSTEM_DISK=local
+            QUEUE_CONNECTION=sync
+            SESSION_DRIVER=file
+            SESSION_LIFETIME=120
+
+            MAIL_MAILER=smtp
+            MAIL_HOST=${{ secrets.MAIL_HOST }}
+            MAIL_PORT=${{ secrets.MAIL_PORT }}
+            MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+            MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+            MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}
+            MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}
+            MAIL_FROM_NAME="${APP_NAME}"
+            EOF
+
+            echo "🎯 Installing Composer dependencies"
+            composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            composer dump-autoload --optimize 
+            composer run-script post-autoload-dump --no-interaction
+
+            echo "🔑 Setting permissions"
+            chmod -R 775 storage bootstrap/cache
+            chown -R www-data:www-data .
+
+            echo "⚙️ Running Laravel setup"
+            php artisan config:clear
+            php artisan config:cache
+            php artisan key:generate 
+            php artisan route:cache
+            php artisan view:cache
+            php artisan migrate
+            php artisan db:seed
+            php artisan storage:link 
+
+            echo "🗂️ Optimizing Laravel"
+            php artisan optimize
+
+            echo "🧹 Clearing old caches"
+            php artisan queue:restart || true
+
+            echo "✅ Laravel API deployment complete!"

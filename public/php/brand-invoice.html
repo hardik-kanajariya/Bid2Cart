@@ -1,0 +1,130 @@
+<page>
+    <!-- PDF Styling -->
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .left {
+            float: left;
+        }
+
+        td.w-10 {
+            width: 10%;
+        }
+
+        td.w-40 {
+            width: 40%;
+        }
+
+        td.w-100 {
+            width: 100%;
+        }
+
+        td.w-33 {
+            width: 33%;
+        }
+
+        table,
+        td,
+        th {
+            border: 2px solid #000;
+        }
+
+        th {
+            font-weight: normal;
+            text-align: center;
+            padding: 5px 5px 0px 5px;
+            background-repeat: repeat-x;
+            height: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #000;
+        }
+
+        td {
+            padding: 16px 3px 3px 3px;
+            border: 1px solid #000;
+        }
+
+        @frame footer {
+            -pdf-frame-content: footerContent;
+            bottom: 2cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
+            border: none !important;
+        }
+    </style><!-- Logo and Title -->
+    <div class="row">
+        <div class="col-12"> <img src="' . $invoice_logo . '" style="align:left; display:inline;" height="100"
+                width="100" />
+            <h3 class="text-center po" align="right"
+                style="text-transform: uppercase;font-weight: bolder; color:#887d7d; margin-top:-100px;">Brand Invoice
+            </h3>
+        </div>
+    </div><!-- Header Details Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th align="left" style="width: 50%">Brand Details</th>
+                <th align="right" style="width: 50%">Invoice Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Brand Name: '.$brand_name.' <br> Total Products: '.$total_brand_products.' <br> Product with no
+                    bids: '.$product_with_no_bids.'</td>
+                <td align="right"> Invoice Date: ' . date("d/m/Y") . ' <br /> Invoice No. : ' . $invoice_number . '
+                    <br /> Auction start: ' . $bid_start . ' <br /> Auction end: ' . $bid_end . ' <br />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered" style=" border: 1px solid;">
+        <thead>
+            <tr style="text-align: center; border: 1px solid;">
+                <th style="text-align: center;">#</th>
+                <th style="text-align: center;">username</th>
+                <th style="text-align: center;">Total products</th>
+                <th style="text-align: center;">Total Purchase price</th>
+                <th style="text-align: center;">Total Sell Price</th>
+                <th style="text-align: center;">Tax</th>
+                <th style="text-align: center;">B2C Fee</th>
+                <th style="text-align: center;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Invoice Row -->
+            '.$invoice_row.'
+            <!-- Invoice Total Row -->
+            <tr>
+                <td colspan="7">Total Purchase: </td>
+                <td>'.$total_purchase.'</td>
+            </tr>
+            <tr>
+                <td colspan="7">Total Sell: </td>
+                <td>'.$total_sells.'</td>
+            </tr>
+            <tr>
+                <td colspan="7">Total Tax: </td>
+                <td>'.$total_tax.'</td>
+            </tr>
+            <tr>
+                <td colspan="7">Total B2C Fee: </td>
+                <td>'.$total_b2c_fee.'</td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- PDf footer [Company Details] -->
+    <page_footer>
+        <div class="page_footer" style="border: none">
+            <div>
+                <div style="width: 100%; text-align: center; color:#758DA6"> Bid2Cart Auction House, some
+                    address,pin-76XXXX, phone:9000000XXX <br /> www.bid2cart.ca </div>
+            </div>
+        </div>
+    </page_footer>
+</page>

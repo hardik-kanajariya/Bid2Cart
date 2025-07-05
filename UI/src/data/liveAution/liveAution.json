@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "home1Image": "assets/images/bg/live-auc1.png",
+    "home1title": "Brand New royal Enfield 250 CC For Sale",
+    "home1Price": "85.9",
+    "authorImage": "assets/images/bg/auction-authr1.png",
+    "authorName": "Adam jons",
+    "price": "520.25"
+  },
+  {
+    "id": 2,
+    "home1Image": "assets/images/bg/live-auc2.png",
+    "home1title": "Wedding Special Exclusive Cupple Ring (S2022)",
+    "home1Price": "55.9",
+    "authorImage": "assets/images/bg/auction-authr2.png",
+    "authorName": "william keri",
+    "price": "106.25"
+  },
+  {
+    "id": 3,
+    "home1Image": "assets/images/bg/live-auc3.png",
+    "home1title": "Brand New Honda CBR 600 RR For Special Sale (2022)",
+    "home1Price": "60.9",
+    "authorImage": "assets/images/bg/auction-authr3.png",
+    "authorName": "john dou",
+    "price": "685.25"
+  },
+  {
+    "id": 4,
+    "home1Image": "assets/images/bg/live-auc4.png",
+    "home1title": "Toyota AIGID A Class Hatchback Sale (2017 - 2021)",
+    "home1Price": "69.9",
+    "authorImage": "assets/images/bg/auction-authr4.png",
+    "authorName": "Quriy Songi",
+    "price": "24.25"
+  },
+  {
+    "id": 5,
+    "home1Image": "assets/images/bg/live-auc5.png",
+    "home1title": "Havit HV-G61 USB Black Double Game Pad With Vibrat",
+    "home1Price": "619.9",
+    "authorImage": "assets/images/bg/auction-authr5.png",
+    "authorName": "Handi keu",
+    "price": "55.25"
+  },
+  {
+    "id": 6,
+    "home1Image": "assets/images/bg/live-auc6.png",
+    "home1title": "IPhone 11 Pro Max All Variants Available For Special Sale",
+    "home1Price": "150.9",
+    "authorImage": "assets/images/bg/auction-authr6.png",
+    "authorName": "Luthr mograbn",
+    "price": "56.25"
+  }
+]

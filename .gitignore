@@ -1,0 +1,6 @@
+.env
+/vendor
+/node_modules
+public/vendor
+UI/.next
+UI/.out
