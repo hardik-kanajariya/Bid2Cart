@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Allow Dubious Ownership
-        run: git config --global --add safe.directory /home/hardikkanajariya-bid2cart/htdocs/bid2cart
-
       - name: Deploy Next.js UI via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -21,23 +18,32 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "📁 Navigating to Next.js UI directory"
-            cd /home/hardikkanajariya-bid2cart/htdocs/bid2cart
+            echo "📁 Navigating to project root"
+            cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
 
             echo "🔄 Pulling latest changes from Git"
+            git config --global --add safe.directory /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
             git pull origin main
 
-            echo "📂 Moving to UI directory"
+            echo "📂 Moving into UI directory"
             cd UI
 
-            echo "📦 Installing Node.js dependencies"
+            echo "⬇️ Installing NVM & Node.js"
+            export NVM_DIR="$HOME/.nvm"
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            nvm install 22
+            nvm use 22
+
+            echo "📦 Installing dependencies"
             npm ci --only=production --force
 
-            echo "🔧 Creating .env file"
+            echo "🔧 Creating .env.local file"
             cat > .env.local << 'EOF'
             NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}
 
-            # Social Authetication Details
+            # Social Auth
             NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
             NEXT_PUBLIC_FACEBOOK_APP_ID=${{ secrets.NEXT_PUBLIC_FACEBOOK_APP_ID }}
             NEXT_PUBLIC_FACEBOOK_APP_SECRET=${{ secrets.NEXT_PUBLIC_FACEBOOK_APP_SECRET }}
@@ -52,7 +58,7 @@ jobs:
             NEXT_PUBLIC_CONTACT_EMAIL=support@bid2cart.com
             NEXT_PUBLIC_CONTACT_EMAIL2=info@bid2cart.com
 
-            # Mobile
+            # Phone
             NEXT_PUBLIC_CONTACT_PHONE=+613 458 9585
             NEXT_PUBLIC_CONTACT_PHONE2=+965 566 8596
 
@@ -63,13 +69,17 @@ jobs:
             NEXT_PUBLIC_CONTACT_ADDRESS_COUNTRY=Toronto
             EOF
 
-            # Remove old static files
-            rm -rf /home/hardikkanajariya-bid2cart/htdocs/bid2cart/UI/out
+            echo "🧹 Cleaning old exports"
+            rm -rf out
 
-            echo "🏗️ Building Next.js static application"
+            echo "🏗️ Building the project"
             npm run build
 
-            echo "📦 Exporting Next.js static files"
-            npm run export 
+            echo "📤 Exporting static site"
+            npm run export
 
-            echo "✅ Next.js static deployment complete!"
+            echo "🚚 Moving exported files to deployment directory"
+            rm -rf /home/bid2cart/htdocs/bid2cart.hardikkanajariya.in/*
+            cp -r out/* /home/bid2cart/htdocs/bid2cart.hardikkanajariya.in/
+
+            echo "✅ Deployment complete!"
