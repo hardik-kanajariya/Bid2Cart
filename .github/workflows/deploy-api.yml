@@ -1,4 +1,4 @@
-name: Deploy API to api.bid2cart.hardikkanajariya.in
+name: Deploy Admin Panel
 
 on:
   push:

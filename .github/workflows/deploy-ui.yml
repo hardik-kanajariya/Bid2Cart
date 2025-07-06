@@ -1,4 +1,4 @@
-name: Deploy UI to bid2cart.hardikkanajariya.in
+name: Deploy UI 
 
 on:
   push:
