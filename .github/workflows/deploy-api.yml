@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Allow Dubious Ownership
-        run: 
-
       - name: Deploy Laravel API via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -23,7 +20,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             safe.directory /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
-            
+
             echo "📁 Navigating to Laravel API directory"
             cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
 
