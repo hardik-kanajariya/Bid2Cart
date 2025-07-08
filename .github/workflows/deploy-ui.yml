@@ -28,6 +28,8 @@ jobs:
             echo "📂 Moving into UI directory"
             cd UI
 
+            nvm use 22
+
             echo "📦 Installing dependencies"
             npm ci --only=production --force
 
