@@ -69,6 +69,8 @@ jobs:
             sudo chown -R ubuntu:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
 
+            touch storage/logs/laravel.log
+            chmod 664 storage/logs/laravel.log
 
             echo "⚙️ Running Laravel setup"
             php artisan config:cache
