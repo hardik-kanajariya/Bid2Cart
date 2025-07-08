@@ -68,10 +68,8 @@ jobs:
             echo "🔑 Setting permissions"
             sudo chown -R ubuntu:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
-
-            touch storage/logs/laravel.log
-            chmod 664 storage/logs/laravel.log
-
+            chmod -R 777 storage
+            
             echo "⚙️ Running Laravel setup"
             php artisan config:cache
             php artisan key:generate 
