@@ -69,7 +69,6 @@ jobs:
 
             echo "🔑 Setting permissions"
             chmod -R 775 storage bootstrap/cache
-            chown -R www-data:www-data .
 
             echo "⚙️ Running Laravel setup"
             php artisan config:clear

@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Social Login Routes
+// Social Login Routes 
 Route::get('/social/authentication', [SocialController::class, 'apiSocialLogin']);
 
 // Route for Registering new User
