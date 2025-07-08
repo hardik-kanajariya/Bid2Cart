@@ -135,7 +135,7 @@ Route::group(['middleware' => 'adminLogin'], function () {
     Route::get('/settings', [Settings::class, 'viewSettings']);
     Route::post('/settings/invoice', [Settings::class, 'updateInvoiceSettings']);
     Route::post('/settings/{update}', [Settings::class, 'updateSettings']);
-
+  
     // User Management Routes
     Route::get('/users', [User::class, 'viewUser']);
     Route::get('/users/update/{id}/{stt}', [User::class, 'updateStatus']);
