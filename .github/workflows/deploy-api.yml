@@ -11,10 +11,6 @@ jobs:
   deploy-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Debug Info
-        run: | 
-          echo "SSH Key${{ secrets.SSH_KEY }}"
-          echo "SSH Host${{ secrets.SSH_HOST }}"
       - name: Deploy Laravel API via SSH
         uses: appleboy/ssh-action@master
         with:
