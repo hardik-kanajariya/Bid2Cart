@@ -12,6 +12,9 @@ use PHPMailer\PHPMailer\Exception;
 // Importing HTML2PDF
 use Spipu\Html2Pdf\Html2Pdf;
 
+// Importing Dotenv
+use Dotenv\Dotenv;
+
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 
@@ -20,10 +23,12 @@ require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 // Connecting with database
-$server = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'bid2cart';
+$server   = $_ENV['DB_HOST'] ?? 'localhost';
+$username = $_ENV['DB_USERNAME'] ?? 'root';
+$password = $_ENV['DB_PASSWORD'] ?? '';
+$database = $_ENV['DB_DATABASE'] ?? 'bid2cart';
+$dotenv = Dotenv::createImmutable(__DIR__. '/..');
+$dotenv->load();
 $conn = mysqli_connect($server, $username, $password, $database);
 
 // SMTP Server settings

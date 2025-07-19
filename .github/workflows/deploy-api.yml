@@ -104,6 +104,15 @@ jobs:
             php artisan optimize:clear 
 
             php artisan passport:install --force
+            
+            echo "🔄 Copy .env file to Public directory"
+            cp .env public/
+
+            echo "📁 Navigating to Public Directory"
+            cd public
+
+            echo "🔄 Run Composer Install"
+            composer update -q --no-dev --optimize-autoloader 
 
             echo "✅ Laravel API deployment complete!"
 
