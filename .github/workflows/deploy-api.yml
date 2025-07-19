@@ -91,20 +91,10 @@ jobs:
             php artisan route:cache
             php artisan view:cache
             
-            # Check if this is initial deployment or daily restore
-            if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event.inputs.restore_demo_data }}" = "true" ]; then
-              echo "🗃️ Running fresh migration and seeding"
-              php artisan migrate:fresh --force
-              php artisan db:seed --class=AuctionDemoSeeder --force
-              echo "✅ Demo data seeded successfully"
-            elif [ "${{ github.event_name }}" = "schedule" ]; then
-              echo "🔄 Daily demo data restoration"
-              php artisan demo:restore-data
-              echo "✅ Demo data restored"
-            else
-              echo "🔄 Running migrations"
-              php artisan migrate --force
-            fi
+            echo "🗃️ Running fresh migration and seeding"
+            php artisan migrate:fresh --force
+            php artisan db:seed --class=AuctionDemoSeeder --force
+            echo "✅ Demo data seeded successfully"
             
             php artisan storage:link 
 
@@ -113,14 +103,6 @@ jobs:
 
             echo "🧹 Clearing old caches"
             php artisan queue:restart || true
-
-            # Setup cron job for maintenance (only on first deployment)
-            if [ "${{ github.event_name }}" = "push" ]; then
-              echo "⏰ Setting up cron jobs"
-              (crontab -l 2>/dev/null; echo "0 */6 * * * cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in && php artisan auction:maintain-activity") | crontab -
-              (crontab -l 2>/dev/null; echo "*/30 9-18 * * * cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in && php artisan auction:simulate-bidding --duration=30") | crontab -
-              echo "✅ Cron jobs configured"
-            fi
 
             echo "✅ Laravel API deployment complete!"
 
