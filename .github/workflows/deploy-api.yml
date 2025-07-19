@@ -114,14 +114,6 @@ jobs:
             echo "🧹 Clearing old caches"
             php artisan queue:restart || true
 
-            echo "🤖 Starting auction simulation services"
-            # Kill any existing simulation processes
-            pkill -f "auction:simulate-bidding" || true
-            pkill -f "auction:maintain-activity" || true
-            
-            # Start background simulation (if demo mode is enabled)
-            nohup php artisan auction:simulate-bidding --duration=1440 > /dev/null 2>&1 & # Run for 24 hours
-            
             # Setup cron job for maintenance (only on first deployment)
             if [ "${{ github.event_name }}" = "push" ]; then
               echo "⏰ Setting up cron jobs"

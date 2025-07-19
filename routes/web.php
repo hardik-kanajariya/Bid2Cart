@@ -23,6 +23,7 @@ use App\Models\User as ModelsUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SocialController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -155,4 +156,38 @@ Route::group(['middleware' => 'adminLogin'], function () {
     Route::get('/invoice/delete/{id}', [Invoice::class, 'deleteInvoices']);
     Route::get('/invoice/companies', [Invoice::class, 'viewBrandInvoice']);
     Route::get('/brand/invoice/delete/{id}', [Invoice::class, 'deleteBrandInvoice']);
+});
+
+Route::get('/health', function () {
+    try {
+        // Check database connection
+        DB::connection()->getPdo();
+        if (!DB::connection()->getDatabaseName()) {
+            throw new Exception('Database connection failed');
+        }
+
+        // Check basic application status
+        $status = [
+            'status' => 'healthy',
+            'timestamp' => now()->toISOString(),
+            'database' => 'connected',
+            'auctions' => [
+                'total' => DB::table('auction')->count(),
+                'active' => DB::table('auction')->where('status', 'active')->count(),
+            ],
+            'products' => [
+                'total' => DB::table('product')->count(),
+                'active' => DB::table('product')->where('auction_status', 'active')->count(),
+            ],
+            'recent_bids' => DB::table('bid_history')->where('created_at', '>=', now()->subHour())->count(),
+        ];
+        
+        return response()->json($status, 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'unhealthy',
+            'error' => $e->getMessage(),
+            'timestamp' => now()->toISOString(),
+        ], 500);
+    }
 });
