@@ -23,6 +23,8 @@ jobs:
 
             echo "🔄 Pulling latest changes from Git"
             git config --global --add safe.directory /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
+            git fetch origin
+            git reset --hard origin/main
             git pull origin main
 
             echo "📂 Moving into UI directory"
