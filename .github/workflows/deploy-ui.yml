@@ -5,6 +5,13 @@ on:
     branches: [main]
     paths:
       - 'UI/**'  # Only trigger on UI changes
+  workflow_dispatch:
+    inputs:
+      run_build:
+        description: 'Run build and deploy UI'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   deploy-ui:
