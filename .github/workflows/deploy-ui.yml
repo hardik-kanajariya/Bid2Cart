@@ -33,7 +33,7 @@ jobs:
             nvm use 22
 
             echo "📦 Installing dependencies"
-            npm ci --only=production --force
+            npm install --force
 
             echo "🔧 Creating .env.local file"
             cat > .env.local << 'EOF'
