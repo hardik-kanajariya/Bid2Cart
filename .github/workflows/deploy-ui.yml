@@ -40,7 +40,8 @@ jobs:
             echo "📂 Moving into UI directory"
             cd UI
 
-            nvm use 22
+            sudo nvm use 22
+            node -v 
 
             echo "📦 Installing dependencies"  
             rm -rf node_modules package-lock.json
