@@ -101,6 +101,10 @@ jobs:
             
             php artisan storage:link 
 
+            php artisan optimize:clear 
+
+            php artisan passport:install --force
+
             echo "✅ Laravel API deployment complete!"
 
   # Separate job for continuous demo data management

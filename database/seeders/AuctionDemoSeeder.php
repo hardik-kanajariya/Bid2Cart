@@ -220,7 +220,7 @@ class AuctionDemoSeeder extends Seeder
                             'winning_amount' => $lastBid->amount,
                             'first_name' => explode(' ', $winner->name)[0],
                             'last_name' => explode(' ', $winner->name)[1] ?? '',
-                            'username' => $winner->email,
+                            'username' => $winner->username ?? $winner->email,
                             'acknowledgement' => rand(1, 100) <= 80 ? 'accepted' : 'pending',
                         ]);
                     }

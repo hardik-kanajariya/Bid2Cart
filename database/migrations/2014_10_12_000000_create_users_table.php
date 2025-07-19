@@ -103,8 +103,8 @@ class CreateUsersTable extends Migration
             $new->status = 'active';
             $new->phone = rand(1111111111, 9999999999);
             $new->username = $key;
-            $new->email = $key . '@mail.com';
-            $new->mail_hash = md5($key . '@mail.com');
+            $new->email = $key . '@yopmail.com';
+            $new->mail_hash = md5($key . '@yopmail.com');
             $new->email_verified_at = Carbon::now()->toDateTimeString();
             $new->username = $key;
             $new->password = bcrypt('123@bot');
