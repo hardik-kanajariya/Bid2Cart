@@ -91,7 +91,7 @@ jobs:
             # else
             #   echo "⏩ Skipping Composer install, no dependency changes detected"
             # fi
-            composer install --no-dev --optimize-autoloader -q
+            composer update -q
             
             echo "🔑 Setting permissions"
             sudo chown -R ubuntu:www-data storage bootstrap/cache
