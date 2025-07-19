@@ -40,13 +40,7 @@ jobs:
             nvm use 22
 
             echo "📦 Installing dependencies"            
-            # Check for package.json
-            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'package\.json'; then
-              echo "🎯 Installing npm dependencies"
-              npm install --force
-            else
-              echo "⏩ Skipping npm install, no dependency changes detected"
-            fi
+            npm install --force
 
             echo "🔧 Creating .env.local file"
             cat > .env.local << 'EOF'
