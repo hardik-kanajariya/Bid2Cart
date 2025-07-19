@@ -40,7 +40,7 @@ class ErrorBoundary extends React.Component {
               <div className="alert alert-danger text-center" role="alert">
                 <h4 className="alert-heading">Oops! Something went wrong</h4>
                 <p className="mb-0">
-                  We're sorry, but something unexpected happened. Please try refreshing the page.
+                  Wea are sorry, but something unexpected happened. Please try refreshing the page.
                 </p>
                 {process.env.NODE_ENV === 'development' && (
                   <details className="mt-3 text-start">
