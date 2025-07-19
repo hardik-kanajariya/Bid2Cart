@@ -22,13 +22,15 @@ require 'vendor/autoload.php';
 
 $mail = new PHPMailer(true);
 
+// Load environment variables from the current directory 
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 // Connecting with database
 $server   = $_ENV['DB_HOST'] ?? 'localhost';
 $username = $_ENV['DB_USERNAME'] ?? 'root';
 $password = $_ENV['DB_PASSWORD'] ?? '';
 $database = $_ENV['DB_DATABASE'] ?? 'bid2cart';
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
 $conn = mysqli_connect($server, $username, $password, $database);
 
 // SMTP Server settings
