@@ -54,23 +54,24 @@ class Api extends Controller
     public function getAllCategory()
     {
         $cat = Category::all();
+        $response = [];
+
         foreach ($cat as $key) {
-            // Getting products from category
+            // Count products for this category
             $count_products = Product::where('category_id', $key['cat_id'])->count();
-            $key['category_thumbnail'] = url('/') . '/uploads/category_thumbnail/' . $key['category_thumbnail'];
-            if($count_products > 0){
-                $key['category_thumbnail'] = url('/') . '/uploads/category_thumbnail/' . $key['category_thumbnail'];
-            }else{
-                unset($cat[$key['cat_id']]);
+
+            // If products exist, include the category
+            if ($count_products > 0) {
+                // Prepend full URL only once
+                $key['category_thumbnail'] = url('/uploads/category_thumbnail/' . $key['category_thumbnail']);
+                $response[] = $key;
             }
+            // Else skip the category
         }
-        // getting category which has products
-        $response = array();
-        foreach ($cat as $key) {
-            array_push($response, $key);
-        }
+
         return $response;
     }
+
 
     // Function to Get Number of Products
     public function getAllProducts()
@@ -869,11 +870,11 @@ class Api extends Controller
             array_push($data, $bidData);
         }
         $data = array_unique($data);
-        foreach($data as $key){
-            if($key->status == "winning"){
+        foreach ($data as $key) {
+            if ($key->status == "winning") {
                 $winningcount++;
             }
-            if($key->status == "loosing"){
+            if ($key->status == "loosing") {
                 $loosingCount++;
             }
         }

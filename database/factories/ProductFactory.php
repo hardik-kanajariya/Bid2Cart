@@ -59,9 +59,9 @@ class ProductFactory extends Factory
         $currentBid = rand($minimumBid, $retailValue * 0.8);
         
         $images = [
-            'https://picsum.photos/400/300?random=' . rand(1, 1000),
-            'https://picsum.photos/400/300?random=' . rand(1001, 2000),
-            'https://picsum.photos/400/300?random=' . rand(2001, 3000)
+            '1 (' . rand(1, 33) . ').jpeg',
+            '1 (' . rand(33, 66) . ').jpeg',
+            '1 (' . rand(66, 99) . ').jpeg'
         ];
 
         return [
@@ -69,7 +69,7 @@ class ProductFactory extends Factory
             'category_id' => $categoryId,
             'brand_name' => $this->faker->randomElement(['Apple', 'Samsung', 'Sony', 'Nike', 'Gucci', 'Amazon', 'Microsoft', 'bid2cart']),
             'title' => $this->faker->randomElement($productNames),
-            'thumbnail' => 'https://picsum.photos/300/300?random=' . rand(1, 1000),
+            'thumbnail' => '1 (' . rand(1, 99) . ').jpeg',
             'images' => json_encode($images),
             'website' => $this->faker->url(),
             'condition_rating' => rand(6, 10),

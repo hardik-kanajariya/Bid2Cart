@@ -15,32 +15,6 @@ class UserFactory extends Factory
     public function definition()
     {
 
-        /*
-        <?php
-Schema::create('users', function (Blueprint $table) {
-    $table->id('userid');
-    $table->string('first_name');
-    $table->string('last_name');
-    $table->string('address');
-    $table->string('city');
-    $table->string('state');
-    $table->string('country')->default('canada');
-    $table->string('zip');
-    $table->string('phone');
-    $table->string('ads')->default("");
-    $table->string('username')->unique();
-    $table->boolean('news_latter')->default(0);
-    $table->string('status')->default('pending');
-    $table->string('email')->unique();
-    $table->string('mail_hash')->unique();
-    $table->timestamp('email_verified_at')->nullable();
-    $table->string('password')->nullable();
-    $table->string('google_id')->nullable(); // Added
-    $table->string('avatar')->nullable(); // Added
-    $table->rememberToken();
-    $table->timestamps();
-});
-        */
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
