@@ -34,9 +34,12 @@ jobs:
             cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
 
             echo "🔄 Pulling latest changes from Git"
+            git reset hard
+            git clean -fd
             git fetch origin
             git reset --hard origin/main
             git pull origin main
+            git status
 
             echo "🔧 Creating .env file"
             cat > .env << 'EOF'
@@ -82,7 +85,7 @@ jobs:
 
             echo "🎯 Installing Composer dependencies"
             # Check for composer.json or composer.lock changes
-            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'composer\.json|composer\.lock'; then
+            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'composer\.json|composer\.lock\.json'; then
               echo "🎯 Installing Composer dependencies"
               composer install --no-dev --optimize-autoloader -q
             else
@@ -129,14 +132,21 @@ jobs:
           script: |
             cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
             
-            echo "🎯 Managing auction activity"
-            php artisan auction:maintain-activity
+            # echo "🎯 Managing auction activity"
+            # php artisan auction:maintain-activity
             
-            echo "🤖 Restarting bidding simulation"
-            pkill -f "auction:simulate-bidding" || true
-            nohup php artisan auction:simulate-bidding --duration=1440 > /dev/null 2>&1 &
+            # echo "🤖 Restarting bidding simulation"
+            # pkill -f "auction:simulate-bidding" || true
+            # nohup php artisan auction:simulate-bidding --duration=1440 > /dev/null 2>&1 &
             
-            echo "📊 Generating activity report"
-            php artisan demo:activity-report
-            
+            # echo "📊 Generating activity report"
+            # php artisan demo:activity-report
+
+            echo "📁 Navigating to Laravel API directory"
+            cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
+
+            echo "🔄 Fresh Migration"
+            php artisan migrate:fresh --force 
+            echo "🔄 Seeding Demo Data"
+            php artisan db:seed --class=AuctionDemoSeeder --force
             echo "✅ Demo management complete"
