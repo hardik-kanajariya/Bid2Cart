@@ -15,11 +15,11 @@ class CreateInvoiceTable extends Migration
     {
         Schema::create('invoice', function (Blueprint $table) {
             $table->id();
-            $table->string('aid');
-            $table->string('uid');
-            $table->string('pid');
-            $table->string('sid');
-            $table->string('bid');
+            $table->string('aid'); // Auction ID 
+            $table->string('uid'); // User ID 
+            $table->string('pid'); // Product ID 
+            $table->string('sid'); // Store ID 
+            $table->string('bid'); // Bid Amount
             $table->string('invoice_number');
             $table->string('invoice_total');
             $table->string('product_name');
