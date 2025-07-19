@@ -35,7 +35,7 @@ jobs:
 
             echo "🔧 Creating .env.local file"
             cat > .env.local << 'EOF'
-            NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}
+            NEXT_PUBLIC_API_URL=https://b2c-admin.hardikkanajariya.in
 
             # Social Auth
             NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}

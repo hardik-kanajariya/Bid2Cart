@@ -6,6 +6,16 @@ on:
     paths:
       - '**'
       - '!UI/**'  # Don't trigger on UI changes
+  schedule:
+    # Run daily at 2 AM UTC to restore demo data
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      restore_demo_data:
+        description: 'Restore demo auction data'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   deploy-api:
@@ -29,10 +39,10 @@ jobs:
             echo "🔧 Creating .env file"
             cat > .env << 'EOF'
             APP_NAME=${{ secrets.APP_NAME }}
-            APP_ENV=local
+            APP_ENV=production
             APP_KEY=${{ secrets.APP_KEY }}
-            APP_DEBUG=true
-            APP_URL=${{ secrets.APP_URL }}
+            APP_DEBUG=false
+            APP_URL=https://b2c-admin.hardikkanajariya.in
 
             LOG_CHANNEL=stack
             LOG_DEPRECATIONS_CHANNEL=null
@@ -60,10 +70,16 @@ jobs:
             MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}
             MAIL_FROM_ADDRESS=${{ secrets.MAIL_FROM_ADDRESS }}
             MAIL_FROM_NAME="${APP_NAME}"
+
+            # Demo Configuration
+            DEMO_MODE=true
+            DEMO_AUTO_BIDDING=true
+            DEMO_BOT_COUNT=50
+            DEMO_REGULAR_USER_COUNT=20
             EOF
 
             echo "🎯 Installing Composer dependencies"
-            composer update
+            composer update --no-dev --optimize-autoloader
             
             echo "🔑 Setting permissions"
             sudo chown -R ubuntu:www-data storage bootstrap/cache
@@ -72,11 +88,24 @@ jobs:
             
             echo "⚙️ Running Laravel setup"
             php artisan config:cache
-            php artisan key:generate 
             php artisan route:cache
             php artisan view:cache
-            php artisan migrate
-            php artisan db:seed
+            
+            # Check if this is initial deployment or daily restore
+            if [ "${{ github.event_name }}" = "push" ] || [ "${{ github.event.inputs.restore_demo_data }}" = "true" ]; then
+              echo "🗃️ Running fresh migration and seeding"
+              php artisan migrate:fresh --force
+              php artisan db:seed --class=AuctionDemoSeeder --force
+              echo "✅ Demo data seeded successfully"
+            elif [ "${{ github.event_name }}" = "schedule" ]; then
+              echo "🔄 Daily demo data restoration"
+              php artisan demo:restore-data
+              echo "✅ Demo data restored"
+            else
+              echo "🔄 Running migrations"
+              php artisan migrate --force
+            fi
+            
             php artisan storage:link 
 
             echo "🗂️ Optimizing Laravel"
@@ -85,4 +114,47 @@ jobs:
             echo "🧹 Clearing old caches"
             php artisan queue:restart || true
 
+            echo "🤖 Starting auction simulation services"
+            # Kill any existing simulation processes
+            pkill -f "auction:simulate-bidding" || true
+            pkill -f "auction:maintain-activity" || true
+            
+            # Start background simulation (if demo mode is enabled)
+            nohup php artisan auction:simulate-bidding --duration=1440 > /dev/null 2>&1 & # Run for 24 hours
+            
+            # Setup cron job for maintenance (only on first deployment)
+            if [ "${{ github.event_name }}" = "push" ]; then
+              echo "⏰ Setting up cron jobs"
+              (crontab -l 2>/dev/null; echo "0 */6 * * * cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in && php artisan auction:maintain-activity") | crontab -
+              (crontab -l 2>/dev/null; echo "*/30 9-18 * * * cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in && php artisan auction:simulate-bidding --duration=30") | crontab -
+              echo "✅ Cron jobs configured"
+            fi
+
             echo "✅ Laravel API deployment complete!"
+
+  # Separate job for continuous demo data management
+  manage-demo-data:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    needs: deploy-api
+    steps:
+      - name: Manage Demo Auction Activity
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/b2c-admin/htdocs/b2c-admin.hardikkanajariya.in
+            
+            echo "🎯 Managing auction activity"
+            php artisan auction:maintain-activity
+            
+            echo "🤖 Restarting bidding simulation"
+            pkill -f "auction:simulate-bidding" || true
+            nohup php artisan auction:simulate-bidding --duration=1440 > /dev/null 2>&1 &
+            
+            echo "📊 Generating activity report"
+            php artisan demo:activity-report
+            
+            echo "✅ Demo management complete"

@@ -14,8 +14,49 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+
+        /*
+        <?php
+Schema::create('users', function (Blueprint $table) {
+    $table->id('userid');
+    $table->string('first_name');
+    $table->string('last_name');
+    $table->string('address');
+    $table->string('city');
+    $table->string('state');
+    $table->string('country')->default('canada');
+    $table->string('zip');
+    $table->string('phone');
+    $table->string('ads')->default("");
+    $table->string('username')->unique();
+    $table->boolean('news_latter')->default(0);
+    $table->string('status')->default('pending');
+    $table->string('email')->unique();
+    $table->string('mail_hash')->unique();
+    $table->timestamp('email_verified_at')->nullable();
+    $table->string('password')->nullable();
+    $table->string('google_id')->nullable(); // Added
+    $table->string('avatar')->nullable(); // Added
+    $table->rememberToken();
+    $table->timestamps();
+});
+        */
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->state(),
+            'country' => 'canada',
+            'zip' => $this->faker->postcode(),
+            'phone' => $this->faker->phoneNumber(),
+            'ads' => '',
+            'username' => $this->faker->unique()->userName(),
+            'news_latter' => false,
+            'status' => 'pending',
+            'mail_hash' => Str::random(32),
+            'google_id' => Str::random(32),
+            'avatar' => $this->faker->imageUrl(640, 480, 'people', true, 'Faker'),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -23,16 +64,13 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function unverified()
+    public function bot()
     {
         return $this->state(function (array $attributes) {
             return [
-                'email_verified_at' => null,
+                'first_name' => 'Bot ' . $this->faker->firstName(),
+                'last_name' => $this->faker->lastName(),
+                'email' => 'bot' . rand(1000, 9999) . '@bot.local',
             ];
         });
     }
