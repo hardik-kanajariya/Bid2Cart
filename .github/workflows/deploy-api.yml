@@ -85,12 +85,13 @@ jobs:
 
             echo "🎯 Installing Composer dependencies"
             # Check for composer.json or composer.lock changes
-            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'composer\.json|composer\.lock\.json'; then
-              echo "🎯 Installing Composer dependencies"
-              composer install --no-dev --optimize-autoloader -q
-            else
-              echo "⏩ Skipping Composer install, no dependency changes detected"
-            fi
+            # if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E 'composer\.json|composer\.lock\.json'; then
+            #   echo "🎯 Installing Composer dependencies"
+            #   composer install --no-dev --optimize-autoloader -q
+            # else
+            #   echo "⏩ Skipping Composer install, no dependency changes detected"
+            # fi
+            composer install --no-dev --optimize-autoloader -q
             
             echo "🔑 Setting permissions"
             sudo chown -R ubuntu:www-data storage bootstrap/cache
