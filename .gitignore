@@ -6,3 +6,4 @@ UI/.next
 UI/.out
 secrets.sh
 *.key
+/public/invoice
