@@ -1,0 +1,46 @@
+name: EC2 Auto Cleanup
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 */12 * * *' # Every 12 hours
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    name: "Clean up EC2 server"
+
+    steps:
+      - name: "🚀 Run cleanup commands on EC2"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "🧹 Starting EC2 cleanup on $(date)"
+
+            # APT cleanups
+            sudo apt-get clean -y
+            sudo apt-get autoclean -y
+            sudo apt-get autoremove -y
+
+            # Clear temp files
+            sudo rm -rf /tmp/*
+            sudo rm -rf /var/tmp/*
+
+            # Clear log files
+            sudo journalctl --vacuum-time=7d
+            sudo find /var/log -type f -name "*.log" -delete
+
+            # Clean npm & cache
+            npm cache clean --force || true
+            sudo rm -rf ~/.npm ~/.cache || true
+
+            # Clear RAM cache & reset swap
+            sudo swapoff -a && sudo swapon -a
+            sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches
+
+            echo "✅ Cleanup finished on $(hostname) at $(date)"
