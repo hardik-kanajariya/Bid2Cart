@@ -42,9 +42,21 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'first_name' => 'Bot ' . $this->faker->firstName(),
+                'first_name' => $this->faker->firstName(),
                 'last_name' => $this->faker->lastName(),
-                'email' => 'bot' . rand(1000, 9999) . '@bot.local',
+                'email' => $this->faker->unique()->safeEmail(),
+                'username' => $this->faker->unique()->userName(),
+                'status' => 'active',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'address' => $this->faker->streetAddress(),
+                'city' => $this->faker->city(),
+                'state' => $this->faker->state(),
+                'country' => 'canada',
+                'zip' => $this->faker->postcode(), 
+                'phone' => $this->faker->phoneNumber(),
+                'avatar' => $this->faker->imageUrl(640, 480, 'people', true, 'Bot'),
+                'news_latter' => false,
+                'mail_hash' => Str::random(32)
             ];
         });
     }
